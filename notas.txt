@@ -1,0 +1,45 @@
+Fecha de creacion 18 ener de 2024
+Hice este proyecto siguiendo este video:
+https://www.youtube.com/watch?v=4clEduk6OQM&list=LL&index=4&t=898s&ab_channel=FaztCode
+//iniciar un proyecto de node
+npm init -y
+//instalar typescript
+npm typescript -D
+//crear el archivo tsconfig.json
+npx tsc --init
+//instalar un modulo par aescribir el codigo del servidor
+npm i express
+
+//para quitar errores instalamos los tipos de express
+npm i @types/express -D
+
+// hacer que type script traduzca codigo dentro de la carpeta dist a JS
+npx tsc
+node dist/index.js
+//instalar nodemon 
+npm install nodemon -D
+
+// para compilar de typescripta a javascript ejecuta
+npx tsc
+node dist/index.js
+
+//instalar ts-node, nodemon solo entiende archivos de JS, por eso tenemos que instalar este paquete, para que nodemon entienda ts
+npm i  ts-node -D
+
+//segun el script que esta en package.json podemos ejecutar 
+npm run dev
+// vamos a instalar un midleware llamado morgan
+
+npm i morgan
+// vamos a instalar los tipos de morgan
+npm  i @types/morgan -D
+
+// vamos a instalar un paquete que nos permitira conectarnos a mysql
+npm i mysql2
+
+// tambien instalamos los tipos
+npm i types/mysql2 -D
+
+falta el manejo de errores
+falta mejorar las respuestas
+
