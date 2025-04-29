@@ -2,8 +2,10 @@
 
 import express, {Application} from 'express';
 import morgan from 'morgan'
-import IndexRoutes  from './routes/index.route'
-import PostsRoutes  from './routes/posts.routes'
+import InfoRoutes  from './routes/info.route'
+import productosRoutes  from './routes/productos.routes'
+import usersRoutes from './routes/users.route'
+
 
 
 export class App{
@@ -20,18 +22,17 @@ export class App{
         this.app.set('port', this.port || process.env.PORT || 3000)
     }
 
-
-    routes(){
-        this.app.use(IndexRoutes);
-        this.app.use('/posts', PostsRoutes);
-    }
-
     middlewares(){
         this.app.use(morgan('dev'));
         //this.app.use(express.urlencoded({extended:false}));//esto es para recibir formularios)
         this.app.use(express.json())
     }
 
+    routes(){
+        this.app.use(InfoRoutes);
+        this.app.use('/productos', productosRoutes);
+        this.app.use('/users', usersRoutes);
+    }
 
     async listen(){
          await this.app.listen(this.app.get('port'));

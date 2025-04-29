@@ -42,4 +42,18 @@ npm i types/mysql2 -D
 
 falta el manejo de errores
 falta mejorar las respuestas
+-------------------------
 
+//paquetes para implementar JWT
+
+npm install jsonwebtoken bcrypt
+
+
+//instalamos los tipos de JWT
+
+
+npm i --save-dev @types/jsonwebtoken
+
+//instalamos los tipos de bycript
+
+npm i --save-dev @types/bcrypt
