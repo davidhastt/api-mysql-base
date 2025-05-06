@@ -6,8 +6,9 @@ import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { Respuesta } from '../interfaces/Respuesta';
 
+
 export async function newUser(req: Request, res: Response){
-  //const { nombre, apaterno, amaterno, departamento, rol, password, email } = req.body;
+  
 
   const persona:Persona= req.body;
   const conn = await connect();
@@ -25,6 +26,57 @@ export async function newUser(req: Request, res: Response){
   } finally {
     conn.end();
   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export async  function getPersonas(req: Request, res: Response): Promise<Response>{
+  const conn = await  connect();
+  let respuesta:Respuesta={"code":200, "status":"success", "message":""};
+  try { 
+      const productos = await  conn.query('SELECT * FROM personas');
+      respuesta.message="Consulta realizada con exito";
+      return res.json(productos[0]);
+  } catch (error) {
+      console.error(error);
+      respuesta.message="Error en el servidor NodeJS";
+      res.status(500).json(respuesta);
+      return res.json(respuesta);  
+  } finally {
+      conn.end();
+      //return res.json(respuesta);
+  }     
+}
+
+
+export async function personasInfo(req: Request, res: Response){
+  let url = req.protocol + '://' + req.get('host') + req.originalUrl;
+
+  //esto es lo que aparece en el  navegador
+  return res.status(200).json({
+      "mensaje":"Bienvenido; a continuacion se muestra en formato JSON el menu de endpoints disponibles para personas",
+      "status":200,
+      "endpoints":[
+          {"obtener personas":`${url}getpersonas`},
+          {"obtener personas":`${url}nueva`}
+      ]
+  }); 
 }
 
 

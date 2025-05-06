@@ -5,10 +5,9 @@ import {getInfo, pruebaConexionDB} from '../controllers/info.controller';
 
 const router = Router();
 
-router.route('/')
-	.get(getInfo)
 
 
+router.get('/', getInfo);
 router.get('/pruebaConexion', pruebaConexionDB);
 
 

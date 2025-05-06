@@ -3,8 +3,8 @@
 import express, {Application} from 'express';
 import morgan from 'morgan'
 import InfoRoutes  from './routes/info.route'
-import productosRoutes  from './routes/productos.routes'
-import usersRoutes from './routes/users.route'
+//import productosRoutes  from './routes/productos.routes'
+import personasRoutes from './routes/personasRoutes'
 
 
 
@@ -12,10 +12,11 @@ export class App{
 	private app: Application;
 
 	constructor(private port: number | string){
-	this.app=express();
-    this.settings();
-    this.middlewares();
-    this.routes();
+        this.app=express();
+        this.settings();
+        this.middlewares();
+        this.routes();
+
     }
 
     settings(){
@@ -30,8 +31,8 @@ export class App{
 
     routes(){
         this.app.use(InfoRoutes);
-        this.app.use('/productos', productosRoutes);
-        this.app.use('/users', usersRoutes);
+        this.app.use(personasRoutes);
+        //this.app.use('/productos', productosRoutes);        
     }
 
     async listen(){

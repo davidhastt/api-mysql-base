@@ -3,7 +3,7 @@ import {connect} from '../database';
 import {Respuesta} from  '../interfaces/Respuesta';
 
 
-export const getInfo=async(req:Request, res:Response):Promise<Response>=>{
+export const getInfo=async(req:Request, res:Response):Promise<Response>=>{ //Aquí se deben ir listando todas los endpoints disponibles
 
     let url = req.protocol + '://' + req.get('host') + req.originalUrl;
 

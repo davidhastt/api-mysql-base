@@ -3,8 +3,8 @@ export interface Persona{
     nombre: string,
     apaterno: string,
     amaterno:string,
-    departamento: string,
-    rol: number,
+    correo: string,
+    rol?: number,
     password: string,
-    correo: string
+    estatus?: number
 }
