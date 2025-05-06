@@ -7,6 +7,62 @@ import * as bcrypt from 'bcrypt';
 import { Respuesta } from '../interfaces/Respuesta';
 
 
+export async function  updatePersona(req:Request, res: Response):Promise<Response>{//proteger ruta
+    const id_persona=  req.params.id_persona;
+    const person:Persona = req.body;
+    const conn = await connect();
+    
+    let respuesta:Respuesta={"code":200, "status":"success", "message":""};
+    try {        
+        const personaData: any= await conn.query('UPDATE personas SET ? WHERE id_persona = ?', [person, id_persona]);
+        if (personaData[0].changedRows>0){
+            respuesta.message="Persona actualizada";
+        }else{            
+            respuesta.message="Peticion correcta, pero no se pudo actualizar, persona no encontrada";
+            respuesta.status="error";
+            respuesta.code=401;
+            //res.status(200).json(respuesta);
+        }
+
+    } catch (error) {
+        console.error(error);
+        respuesta.message="Error en el servidor NodeJS";
+        res.status(500).json(respuesta);
+        //return res.json(respuesta);  
+    } finally {
+        conn.end();
+        return res.json(respuesta);
+
+    } 
+
+}
+
+
+
+export async function  getPersona(req:Request, res: Response):Promise<Response>{
+    
+  const id_persona =  req.params.id_persona;
+ //console.log(id);
+  const conn = await connect();
+  let respuesta:Respuesta={"code":200, "status":"success", "message":""};
+  try {     
+  const personas = await conn.query('SELECT id_persona, nombre, apaterno, amaterno, fechaNac, telefono, correo, fecha_registro FROM personas WHERE id_persona = ?', [id_persona])
+  return res.json(personas[0]);
+  } catch (error) {
+      console.error(error);
+      respuesta.message="Error en el servidor NodeJS";
+      res.status(500).json(respuesta);
+      return res.json(respuesta);  
+  } finally {
+      conn.end();
+      //return res.json(respuesta);
+  }      
+
+}
+
+
+
+
 export async function newUser(req: Request, res: Response){
   
 
@@ -29,33 +85,19 @@ export async function newUser(req: Request, res: Response){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export async  function getPersonas(req: Request, res: Response): Promise<Response>{
+  
   const conn = await  connect();
   let respuesta:Respuesta={"code":200, "status":"success", "message":""};
   try { 
-      const productos = await  conn.query('SELECT * FROM personas');
+      const personas = await  conn.query('SELECT id_persona, rol, nombre, apaterno, amaterno, fechaNac, telefono, correo, fecha_registro FROM personas');
       respuesta.message="Consulta realizada con exito";
-      return res.json(productos[0]);
+      return res.json(personas[0]);
   } catch (error) {
       console.error(error);
       respuesta.message="Error en el servidor NodeJS";
+      respuesta.status="error";
+      respuesta.code=500;
       res.status(500).json(respuesta);
       return res.json(respuesta);  
   } finally {
@@ -63,6 +105,8 @@ export async  function getPersonas(req: Request, res: Response): Promise<Respons
       //return res.json(respuesta);
   }     
 }
+
+
 
 
 export async function personasInfo(req: Request, res: Response){
@@ -73,11 +117,13 @@ export async function personasInfo(req: Request, res: Response){
       "mensaje":"Bienvenido; a continuacion se muestra en formato JSON el menu de endpoints disponibles para personas",
       "status":200,
       "endpoints":[
-          {"obtener personas":`${url}getpersonas`},
-          {"obtener personas":`${url}nueva`}
+        {"crear personas":`${url}nueva`},
+          {"obtener personas":`${url}all`},
+          {"obtener persona":`${url}id`},
       ]
   }); 
 }
+
 
 
 

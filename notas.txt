@@ -57,3 +57,9 @@ npm i --save-dev @types/jsonwebtoken
 //instalamos los tipos de bycript
 
 npm i --save-dev @types/bcrypt
+
+
+
+
+
+falta definir el puerto en el env
