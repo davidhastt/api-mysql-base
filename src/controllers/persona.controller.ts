@@ -7,6 +7,50 @@ import * as bcrypt from 'bcrypt';
 import { Respuesta } from '../interfaces/Respuesta';
 
 
+export async function newUser(req: Request, res: Response){
+  
+
+  const persona:Persona= req.body;
+  const conn = await connect();
+  const hashedPassword:string = await bcrypt.hash(persona.password, 10);
+  persona.password=hashedPassword;
+  
+
+  try {
+    await conn.query('INSERT INTO personas SET ?', [persona]);
+    const respuesta:Respuesta={"code":200, "status":"success", "message":"Persona creada"}
+    return res.json(respuesta);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  } finally {
+    conn.end();
+  }
+}
+
+
+
+export async function  getPersona(req:Request, res: Response):Promise<Response>{
+    
+  const id_persona =  req.params.id_persona;
+ //console.log(id);
+  const conn = await connect();
+  let respuesta:Respuesta={"code":200, "status":"success", "message":""};
+  try {     
+  const personas = await conn.query('SELECT id_persona, nombre, apaterno, amaterno, fechaNac, telefono, correo, fecha_registro FROM personas WHERE id_persona = ?', [id_persona])
+  return res.json(personas[0]);
+  } catch (error) {
+      console.error(error);
+      respuesta.message="Error en el servidor NodeJS";
+      res.status(500).json(respuesta);
+      return res.json(respuesta);  
+  } finally {
+      conn.end();
+      //return res.json(respuesta);
+  }      
+
+}
+
 
 export async function login(req: Request, res: Response){
   const { correo, password } = req.body;
@@ -95,52 +139,6 @@ export async function  updatePersona(req:Request, res: Response):Promise<Respons
 
 }
 
-
-
-export async function  getPersona(req:Request, res: Response):Promise<Response>{
-    
-  const id_persona =  req.params.id_persona;
- //console.log(id);
-  const conn = await connect();
-  let respuesta:Respuesta={"code":200, "status":"success", "message":""};
-  try {     
-  const personas = await conn.query('SELECT id_persona, nombre, apaterno, amaterno, fechaNac, telefono, correo, fecha_registro FROM personas WHERE id_persona = ?', [id_persona])
-  return res.json(personas[0]);
-  } catch (error) {
-      console.error(error);
-      respuesta.message="Error en el servidor NodeJS";
-      res.status(500).json(respuesta);
-      return res.json(respuesta);  
-  } finally {
-      conn.end();
-      //return res.json(respuesta);
-  }      
-
-}
-
-
-
-
-export async function newUser(req: Request, res: Response){
-  
-
-  const persona:Persona= req.body;
-  const conn = await connect();
-  const hashedPassword:string = await bcrypt.hash(persona.password, 10);
-  persona.password=hashedPassword;
-  
-
-  try {
-    await conn.query('INSERT INTO personas SET ?', [persona]);
-    const respuesta:Respuesta={"code":200, "status":"success", "message":"Persona creada"}
-    return res.json(respuesta);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error en el servidor' });
-  } finally {
-    conn.end();
-  }
-}
 
 
 export async  function getPersonas(req: Request, res: Response): Promise<Response>{

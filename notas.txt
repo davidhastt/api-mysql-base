@@ -60,11 +60,15 @@ npm i --save-dev @types/bcrypt
 
 
 
-
-
+//Haciendo**********************************************************************
+api para mostrar todos los egals ok
+api para mostrar ejes tematicos ok
+api para  mostrar archivos por eje tematico
+api que muestra un post aleatorio ok
+api que muestra los 3 posts aleatorios
 
 //MEJORAS**********************************************************************
-
 despues de buscar y de insertar se debe mostrar la informacion del usuario
-
 antes de borrar o actializar se debe validar que la persona exista
+hace falta agregar endpoints al menu de personas info
+necesito los nombres de los temas

@@ -2,9 +2,10 @@
 
 import express, {Application} from 'express';
 import morgan from 'morgan'
-import InfoRoutes  from './routes/info.route'
+import InfoRoutes  from './routes/info.route';
 //import productosRoutes  from './routes/productos.routes'
-import personasRoutes from './routes/personasRoutes'
+import personasRoutes from './routes/personasRoutes';
+import postsRoutes from './routes/posts.routes';
 
 
 
@@ -32,6 +33,7 @@ export class App{
     routes(){
         this.app.use(InfoRoutes);
         this.app.use(personasRoutes);
+        this.app.use(postsRoutes);
         //this.app.use('/productos', productosRoutes);        
     }
 
