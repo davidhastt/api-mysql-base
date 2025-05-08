@@ -63,7 +63,8 @@ npm i --save-dev @types/bcrypt
 
 
 
-reivsa si funciona el api de login
-protege las rutas con JWT
+//MEJORAS**********************************************************************
+
+despues de buscar y de insertar se debe mostrar la informacion del usuario
 
 antes de borrar o actializar se debe validar que la persona exista
