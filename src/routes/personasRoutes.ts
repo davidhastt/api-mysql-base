@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {login, newUser, personasInfo, getPersonas, getPersona, updatePersona} from '../controllers/persona.controller';
+import {login, newUser, personasInfo, getPersonas, getPersona, updatePersona, deletePersona} from '../controllers/persona.controller';
 
 const usersRoutes = Router();
 
@@ -10,10 +10,11 @@ usersRoutes.post('/personas/nueva', newUser);
 usersRoutes.get('/personas/all', getPersonas);
 usersRoutes.get('/personas/:id_persona', getPersona);
 usersRoutes.put('/personas/:id_persona', updatePersona);
+usersRoutes.delete('/personas/:id_persona', deletePersona);
 
 
-usersRoutes.route('/login')
-    .post(login)
+usersRoutes.post('/personas/login', login);
+
 
 
 

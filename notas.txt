@@ -62,6 +62,8 @@ npm i --save-dev @types/bcrypt
 
 
 
-falta definir el puerto en el env
+
 reivsa si funciona el api de login
 protege las rutas con JWT
+
+antes de borrar o actializar se debe validar que la persona exista

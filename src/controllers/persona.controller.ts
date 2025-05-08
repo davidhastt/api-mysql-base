@@ -2,9 +2,67 @@
 import { Request, Response } from 'express';
 import {connect} from '../database'
 import { Persona } from '../interfaces/Persona';
-import * as jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { Respuesta } from '../interfaces/Respuesta';
+
+
+
+export async function login(req: Request, res: Response){
+  const { correo, password } = req.body;
+  //console.log(email, password);
+  const conn = await  connect();
+  const personasData: any= await  conn.query('SELECT * FROM personas WHERE correo = ?', [correo]);
+  const persona: Persona[]=personasData[0];
+
+  if (persona.length===0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }else{
+      const isPasswordValid = await bcrypt.compare(password, persona[0].password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Contraseña incorrecta' });
+      }
+      const jwt_secret: Secret  | undefined = process.env.JWT_SECRET;   
+
+      if (!jwt_secret) {
+        return res.status(500).json({
+          "message": "Error interno del servidor, clave secreta no definida.",
+          "status": 500,
+        });
+    }
+      
+
+      const token = jwt.sign(persona[0], jwt_secret, { expiresIn: '1h' }); 
+      const respuesta:Respuesta={"code":200, "status":"success", "message":{"Authorization":token}}
+      res.json( respuesta );
+    }
+  
+}
+
+
+
+export async function  deletePersona(req:Request, res: Response):Promise<Response>{//proteger ruta
+  const id_persona=  req.params.id_persona;
+  const conn = await connect();
+  console.log("id_persona", id_persona);
+
+  let respuesta:Respuesta={"code":200, "status":"success", "message":""};
+  try {
+      const personaData: any= await conn.query('DELETE FROM personas  WHERE id_persona = ?', [id_persona]);
+      respuesta.message="Persona borrada";
+  } catch (error) {
+      console.error(error);
+      respuesta.message="Error en el servidor NodeJS";
+      res.status(500).json(respuesta);
+      //return res.json(respuesta);  
+  } finally {
+      conn.end();
+      return res.json(respuesta);
+
+  } 
+
+}
+
 
 
 export async function  updatePersona(req:Request, res: Response):Promise<Response>{//proteger ruta
@@ -122,29 +180,4 @@ export async function personasInfo(req: Request, res: Response){
           {"obtener persona":`${url}id`},
       ]
   }); 
-}
-
-
-
-
-export async function login(req: Request, res: Response){
-    const { email, password } = req.body;
-    //console.log(email, password);
-    const conn = await  connect();
-    const personasData: any= await  conn.query('SELECT * FROM personas WHERE email = ?', [email]);
-    const persona: Persona[]=personasData[0];
-
-    if (persona.length===0) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
-      }else{
-        const isPasswordValid = await bcrypt.compare(password, persona[0].password);
-        if (!isPasswordValid) {
-          return res.status(401).json({ error: 'Contraseña incorrecta' });
-        }
-        persona[0].password="234+´{9573-.,|}|°"; //inventamos un password
-        const token = jwt.sign(persona[0], 'mexiqueñ', { expiresIn: '1h' }); //tienes que meter el secret key en una variable de entorno
-        const respuesta:Respuesta={"code":200, "status":"success", "message":{"Authorization":token}}
-        res.json( respuesta );
-      }
-    
 }
